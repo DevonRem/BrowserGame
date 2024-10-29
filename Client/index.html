@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Game WIP</title>
+</head>
+<body>
+    <canvas id="gameCanvas" style="width: 1000; height: 1000;"></canvas>
+    <script src="/socket.io/socket.io.js"></script>
+    
+    
+    
+    <script>
+        const socket = io();
+        const canvas = document.getElementById('gameCanvas');
+        const context = canvas.getContext('2d');
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowUp') socket.emit('move', { dx: 0, dy: -1 });
+            if (event.key === 'ArrowDown') socket.emit('move', { dx: 0, dy: 1 });
+            if (event.key === 'ArrowLeft') socket.emit('move', { dx: -1, dy: 0 });
+            if (event.key === 'ArrowRight') socket.emit('move', { dx: 1, dy: 0 });
+        });
+
+        socket.on('state', (players) => {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            for (let id in players){
+                const player = players[id];
+                context.fillRect(player.x, player.y, 10, 10);
+            }
+        });
+
+    </script>
+
+
+</body>
+</html>
